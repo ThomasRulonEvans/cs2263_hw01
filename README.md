@@ -1,56 +1,34 @@
-# Project Title
+# HW 01
 
 Simple overview of use/purpose.
 
 ## Description
-
-An in-depth paragraph about your project and overview of usagee.
+Program to mave evaluations of provided arguments.
 
 ## Getting Started
 
 ### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
-
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+ // Apache Commons CLI
+ implementation 'commons-cli:commons-cli:1.4'
 
 ## Help
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+-h, --help -> which prints the help/usage message (see below)
+-b <file>, --batch <file> -> which processes the provided file rather than standard input
+-o <file>, --output <file> -> sends the output to the provided file and standard output
 
 ## Authors
 
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+Thomas Evans
+-EvanThom@isu.edu
 
 ## Version History
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
+* 1.0.0 
+-basic implementation of command line options and parsing.
 
 ## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
 
 ## Acknowledgments
 
