@@ -6,6 +6,10 @@ package edu.isu.cs2263hw01;
 import org.apache.commons.cli.*;
 
 public class App {
+    public static void batch(String fileName){
+        System.out.println(fileName);
+    }
+
     public static void helpMessage(){
         System.out.println("usage: eval [OPTIONS] \n" +
                 "Evaluation of simple mathematical expressions\n" +
@@ -15,18 +19,22 @@ public class App {
                 "Copyright (C) 2021 Isaac D. Griffith");
         return ;
     }
+
+    public static void output(String fileName){
+        System.out.println(fileName);
+    }
+
     public static void main(String[] args) throws ParseException {
         //***Definition Stage***
         // create Options object
         Options options = new Options();
 
-        // add option "-h"
-        options.addOption("h", "help", false, "help");
-        // add option "-a"
-        options.addOption("a", false, "add numbers");
-
-        // add option "-m"
-        options.addOption("m", false, "multiply numbers");
+        // add option "-b/--batch"
+        options.addOption("b", "batch", true, "batch file containing expressions to evaluate");
+        // add option "-h/--help"
+        options.addOption("h", "help", false, "print usage message");
+        // add option "-o/--output"
+        options.addOption("o", "output", true, "output file");
 
         //***Parsing Stage***
         //Create a parser
@@ -37,31 +45,15 @@ public class App {
 
         //***Interrogation Stage***
         //hasOptions checks if option is present or not
-        if(cmd.hasOption("h")){
+        if(cmd.hasOption("b") || cmd.hasOption("batch")){
+            batch(cmd.getOptionValue("b"));
+        }
+        else if(cmd.hasOption("h") || cmd.hasOption("help")){
             helpMessage();
         }
-        else if(cmd.hasOption("help")){
-            helpMessage();
+        else if(cmd.hasOption("o") || cmd.hasOption("output")){
+            output(cmd.getOptionValue("o"));
         }
-        else if(cmd.hasOption("a")) {
-            System.out.println("Sum of the numbers: " + getSum(args));
-        }
-        else if(cmd.hasOption("m")) {
-            System.out.println("Multiplication of the numbers: " + getMultiplication(args));
-        }
-    }
-    public static int getSum(String[] args) {
-        int sum = 0;
-        for(int i = 1; i < args.length ; i++) {
-            sum += Integer.parseInt(args[i]);
-        }
-        return sum;
-    }
-    public static int getMultiplication(String[] args) {
-        int multiplication = 1;
-        for(int i = 1; i < args.length ; i++) {
-            multiplication *= Integer.parseInt(args[i]);
-        }
-        return multiplication;
+
     }
 }
