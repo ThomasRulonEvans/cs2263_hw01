@@ -4,12 +4,27 @@
 package edu.isu.cs2263hw01;
 
 import org.apache.commons.cli.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class App {
+
+    //method to process -b args and return bad file message
     public static void batch(String fileName){
-        System.out.println(fileName);
+        File myFile = new File(fileName);
+        try (Stream<String> stream = Files.lines(Paths.get(fileName))){
+            stream.forEach(App::Eval);
+        } catch (IOException e) {
+            System.out.println("Please provide a file value.");
+        }
+
     }
 
+    //method to output -h help message
     public static void helpMessage(){
         System.out.println("usage: eval [OPTIONS] \n" +
                 "Evaluation of simple mathematical expressions\n" +
@@ -20,12 +35,65 @@ public class App {
         return ;
     }
 
+    //method to process -o args
     public static void output(String fileName){
         System.out.println(fileName);
     }
 
+    //method to evaluate passed string expressions
+    public static void Eval(String evalString){
+        //converts string expression into a character array and removes spaces
+        char [] charArray = evalString.replace(" ", "").toCharArray();
+        //holding var for sign to be used, starts as "+" since the first number always needs to be added ti the register
+        char operand = '+';
+        //holding var for chars during parsing
+        String temp = "";
+        //holding var for the outcome of the expression calculation
+        int register = 0;
+        //parser for evaluation of the charArray, iterates over the array until it runs into an operand
+        for (int i = 0; i < charArray.length; i++){
+            //if the current item in charArray is an opperand do one of these calculations
+            if(charArray[i] == '+' || charArray[i] == '-' || charArray[i] == '/' || charArray[i] == '*' ){
+                if (operand == '+'){
+                    register += Integer.parseInt(temp);
+                }
+                if (operand == '-'){
+                    register -= Integer.parseInt(temp);
+                }
+                if (operand == '/'){
+                    register /= Integer.parseInt(temp);
+                }
+                if (operand == '*'){
+                    register *= Integer.parseInt(temp);
+                }
+                operand = charArray[i];
+                temp = "";
+            }
+            //if the current item is not an operand concatenate it to temp
+            else{
+                temp += charArray[i];
+            }
+        }
+        //we'll be holding one more item in temp so we have to processes last item in temp
+        if (operand == '+'){
+            register += Integer.parseInt(temp);
+        }
+        if (operand == '-'){
+            register -= Integer.parseInt(temp);
+        }
+        if (operand == '/'){
+            register /= Integer.parseInt(temp);
+        }
+        if (operand == '*'){
+            register *= Integer.parseInt(temp);
+        }
+        //print the outcome of the expression
+        System.out.println(register);
+    }
+
     public static void main(String[] args) throws ParseException {
-        //***Definition Stage***
+        Scanner myScanner = new Scanner(System.in);
+
         // create Options object
         Options options = new Options();
 
@@ -36,14 +104,12 @@ public class App {
         // add option "-o/--output"
         options.addOption("o", "output", true, "output file");
 
-        //***Parsing Stage***
         //Create a parser
         CommandLineParser parser = new DefaultParser();
 
         //parse the options passed as command line arguments
         CommandLine cmd = parser.parse( options, args);
 
-        //***Interrogation Stage***
         //hasOptions checks if option is present or not
         if(cmd.hasOption("b") || cmd.hasOption("batch")){
             batch(cmd.getOptionValue("b"));
@@ -54,6 +120,12 @@ public class App {
         else if(cmd.hasOption("o") || cmd.hasOption("output")){
             output(cmd.getOptionValue("o"));
         }
-
+        //if no args are passed start a scanner loop
+        else {
+            while (true) {
+                String inputString = myScanner.nextLine();
+                Eval(inputString);
+            }
+        }
     }
 }
