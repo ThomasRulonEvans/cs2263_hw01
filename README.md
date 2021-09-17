@@ -1,11 +1,14 @@
 # HW 01
 
-Simple overview of use/purpose.
+Enter either a plain expression into the command line to be evaluated or provide a file with one expression per line to be evaluated.
 
 ## Description
-Program to mave evaluations of provided arguments.
+Program to make evaluations of provided arguments.
 
 ## Getting Started
+Type any expression without perentheis and the program will return the evaluation of the expression.
+
+Pass the program a file using --args="-b file" and the program will return evaluations line by line of the text document.
 
 ### Dependencies
 
@@ -25,6 +28,8 @@ Thomas Evans
 
 ## Version History
 
+* 1.1.0
+-Implementaion of parsing inputs given at the command line to return a mathmatic evaluation.
 * 1.0.0 
 -basic implementation of command line options and parsing.
 
