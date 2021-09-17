@@ -5,9 +5,22 @@ package edu.isu.cs2263hw01;
 
 import org.apache.commons.cli.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Stream;
+
 public class App {
     public static void batch(String fileName){
-        System.out.println(fileName);
+        File myFile = new File(fileName);
+        try (Stream<String> stream = Files.lines(Paths.get(fileName))){
+            stream.forEach(App::Eval);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void helpMessage(){
@@ -24,7 +37,53 @@ public class App {
         System.out.println(fileName);
     }
 
+    public static void Eval(String evalString){
+        char [] charArray = evalString.replace(" ", "").toCharArray();
+        char operand = '+';
+        String temp = "";
+        int register = 0;
+        boolean operandFound = false;
+        for (int i = 0; i < charArray.length; i++){
+            if(charArray[i] == '+' || charArray[i] == '-' || charArray[i] == '/' || charArray[i] == '*' ){
+                if (operand == '+'){
+                    register += Integer.parseInt(temp);
+                }
+                if (operand == '-'){
+                    register -= Integer.parseInt(temp);
+                }
+                if (operand == '/'){
+                    register /= Integer.parseInt(temp);
+                }
+                if (operand == '*'){
+                    register *= Integer.parseInt(temp);
+                }
+                operand = charArray[i];
+                temp = "";
+            }
+            else{
+                temp += charArray[i];
+            }
+        }
+        //processes last item in temp
+        if (operand == '+'){
+            register += Integer.parseInt(temp);
+        }
+        if (operand == '-'){
+            register -= Integer.parseInt(temp);
+        }
+        if (operand == '/'){
+            register /= Integer.parseInt(temp);
+        }
+        if (operand == '*'){
+            register *= Integer.parseInt(temp);
+        }
+
+        System.out.println(register);
+    }
+
     public static void main(String[] args) throws ParseException {
+        Scanner myScanner = new Scanner(System.in);
+
         //***Definition Stage***
         // create Options object
         Options options = new Options();
@@ -54,6 +113,11 @@ public class App {
         else if(cmd.hasOption("o") || cmd.hasOption("output")){
             output(cmd.getOptionValue("o"));
         }
-
+        else {
+            while (true) {
+                String inputString = myScanner.nextLine();
+                Eval(inputString);
+            }
+        }
     }
 }
