@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class App {
 
-    //method to process -b args and return bad file message
+    //method to process -b args and return bad file message.
     public static void batch(String fileName){
         File myFile = new File(fileName);
         try (Stream<String> stream = Files.lines(Paths.get(fileName))){
